@@ -1,5 +1,5 @@
 {
-  "name": "senior_enrichment",
+  "name": "senior_enrichment_gm",
   "version": "0.0.1",
   "description": "A review time project",
   "main": "index.js",
@@ -7,6 +7,8 @@
     "test": "mocha **/*.test.js *.test.js",
     "build": "webpack",
     "build-watch": "webpack -w",
+    "webpack": "./node_modules/webpack/bin/webpack.js",
+    "start:dev": "npm run webpack -- -w & nodemon server/start.js",
     "start": "nodemon server/start.js"
   },
   "keywords": [
