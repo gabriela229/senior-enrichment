@@ -4,7 +4,12 @@ const { models } = require('../../db/models');
 module.exports = router;
 
 router.get('/', (req, res, next) => {
-  models.Student.findAll()
+  models.Student.findAll(
+    {
+      include: {
+        model: models.Campus
+      }
+    })
     .then( students => {
       res.send(students);
     })

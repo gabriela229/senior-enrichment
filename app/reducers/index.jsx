@@ -11,3 +11,5 @@ const rootReducer = combineReducers({
 export default rootReducer;
 
 export * from './campuses';
+export * from './students';
+
