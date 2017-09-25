@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import {fetchCampuses, fetchStudents} from '../reducers';
 import AllCampuses from './AllCampuses';
 import AllStudents from './AllStudents';
 import SingleCampus from './SingleCampus';
+import SingleStudent from './SingleStudent';
 import Navbar from './Navbar';
 import store from '../store';
-import {fetchCampuses, fetchStudents} from '../reducers';
 
 
 export default class Main extends Component {
@@ -19,15 +20,16 @@ export default class Main extends Component {
 
   render () {
     return (
-      <div className="container">
-      <Navbar />
-      <main>
-          <Switch>
-            <Route exact path="/campuses" component={AllCampuses} />
-            <Route path="/students" component={AllStudents} />
-            <Route path="/campuses/:campusId" component={SingleCampus} />
-            <Redirect to="/campuses" />
-          </Switch>
+      <div>
+        <Navbar />
+        <main className="container-fluid">
+            <Switch>
+              <Route exact path="/campuses" component={AllCampuses} />
+              <Route exact path="/students" component={AllStudents} />
+              <Route path="/campuses/:campusId" component={SingleCampus} />
+              <Route path="/students/:studentId" component={SingleStudent} />
+              <Redirect to="/campuses" />
+            </Switch>
         </main>
       </div>
     );

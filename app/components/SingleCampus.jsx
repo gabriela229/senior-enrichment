@@ -1,14 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { withRouter, NavLink } from 'react-router-dom';
+
 
 function SingleCampus(props){
-  console.log(props);
-  const {students} = props;
+  const {students, campuses} = props;
+  const currentCampus = campuses.filter( campus => {
+    return campus.id === props.match.params.campusId * 1;
+  })[0];
   const campusStudents = students.filter( student => {
     return student.campusId === props.match.params.campusId * 1;
   });
+  let counter = 0;
   return (
     <div>
+      <h1>{currentCampus ? currentCampus.name : null}</h1>
       <table className="table table-hover">
         <thead>
           <tr>
@@ -19,14 +25,15 @@ function SingleCampus(props){
           </tr>
         </thead>
         <tbody>
-          {campusStudents.map( student => {
-            return (
-              <tr key={student.id}>
-                <th scope="row">{student.id}</th>
-                <td>{student.name}</td>
-                <td>{student.campus.name}</td>
-                <td><button className="btn btn-danger">Delete</button></td>
-              </tr>
+        {campusStudents.map( student => {
+          return (
+            <tr key={student.id}>
+            <th scope="row">{++counter}</th>
+                  <td><NavLink to={`/students/${student.id}`} activeClassName="active">{student.name}</NavLink></td>
+                  <td>{student.campus.name}</td>
+                  <td><button className="btn btn-danger">Delete</button></td>
+
+                </tr>
               );
             })
           }
@@ -38,8 +45,9 @@ function SingleCampus(props){
 
 const mapStateToProps = (state) => {
   return {
-    students: state.students
+    students: state.students,
+    campuses: state.campuses
   };
 };
 
-export default connect(mapStateToProps)(SingleCampus);
+export default withRouter(connect(mapStateToProps)(SingleCampus));

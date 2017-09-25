@@ -1,8 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { NavLink } from 'react-router-dom';
+
 
 function AllStudents(props){
   const {students} = props;
+  let counter = 0;
   return (
     <div>
       <div>
@@ -21,8 +24,8 @@ function AllStudents(props){
           {students.map( student => {
             return (
               <tr key={student.id}>
-                <th scope="row">{student.id}</th>
-                <td>{student.name}</td>
+                <th scope="row">{++counter}</th>
+                <td><NavLink to={`/students/${student.id}`} activeClassName="active">{student.name}</NavLink></td>
                 <td>{student.campus.name}</td>
                 <td><button className="btn btn-danger">Delete</button></td>
               </tr>
