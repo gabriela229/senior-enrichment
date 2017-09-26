@@ -5,7 +5,7 @@ const Student = require('./student');
 const Campus = require('./campus');
 
 Student.belongsTo(Campus);
-Campus.hasMany(Student);
+Campus.hasMany(Student, {onDelete: 'CASCADE'});
 
 const models = {
 	Student,
@@ -32,11 +32,11 @@ const seed = () => {
 		}),
 		Campus.create({
 			name: 'Vermilion Campus',
-			image: 'https://cdn.bulbagarden.net/upload/1/16/Vermilion_Gym_anime.png'
+			image: 'https://static.comicvine.com/uploads/square_medium/11/114183/5213031-vermilion_gym_anime.jpg'
 		}),
 		Campus.create({
 			name: 'Pewter Campus',
-			image: 'http://leviathyn.com/wp-content/uploads/2013/08/PS1E5_screenshot2.jpg'
+			image: 'https://sixprizes.com/wp-content/uploads/2015/05/pewter-city-gym.jpg'
 		}),
 		Campus.create({
 			name: 'Cerulean Campus',

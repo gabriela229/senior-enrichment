@@ -6,6 +6,11 @@ export default function Navbar(){
     <div className="navbar navbar-default">
       <div className="container-fluid">
         <ul className="nav navbar-nav navbar-right">
+              <li>
+              <NavLink to="/" activeClassName="active">
+              Home
+              </NavLink>
+            </li>
             <li>
               <NavLink to="/campuses" activeClassName="active">
               Campuses

@@ -27,18 +27,40 @@ router.get('/:studentId', (req, res, next) => {
 router.post('/', (req, res, next) => {
   models.Student.create(req.body)
   .then( student => {
-    res.send(student);
-  })
-  .catch(next);
+    models.Student.findOne(
+      {
+        where: {
+          id: student.id
+        },
+        include: {
+          model: models.Campus
+        }
+      })
+      .then( newStudent => {
+        res.send(newStudent);
+      })
+      .catch(next);
+    })
 });
 
 router.put('/:studentId', (req, res, next) => {
   models.Student.findById(req.params.studentId)
     .then( student => {
-      student.update(req.body);
+      return student.update(req.body);
     })
-    .then( student => {
-      res.send(student);
+    .then( updatedStudent => {
+      return models.Student.findOne(
+        {
+          where: {
+            id: updatedStudent.id
+          },
+          include: {
+            model: models.Campus
+          }
+        })
+    })
+    .then( studentWithCampus => {
+      res.send(studentWithCampus);
     })
     .catch(next);
 

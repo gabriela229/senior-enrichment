@@ -5,32 +5,49 @@ import AllCampuses from './AllCampuses';
 import AllStudents from './AllStudents';
 import SingleCampus from './SingleCampus';
 import SingleStudent from './SingleStudent';
+import Home from './Home';
 import Navbar from './Navbar';
 import store from '../store';
 
 
 export default class Main extends Component {
+  constructor(){
+    super();
+    this.state = {
+      data: false
+    };
+  }
 
   componentDidMount () {
     const studentsThunk = fetchStudents();
     const campusesThunk = fetchCampuses();
-    store.dispatch(studentsThunk);
-    store.dispatch(campusesThunk);
+    Promise.all([
+      store.dispatch(studentsThunk),
+      store.dispatch(campusesThunk)
+    ])
+    .then( () => {
+      this.setState({data: true});
+    });
+
+
   }
 
   render () {
     return (
       <div>
-        <Navbar />
-        <main className="container-fluid">
+      <Navbar />
+      {this.state.data ?
+        <main className="container">
             <Switch>
+              <Route exact path="/" component={Home} />
               <Route exact path="/campuses" component={AllCampuses} />
               <Route exact path="/students" component={AllStudents} />
               <Route path="/campuses/:campusId" component={SingleCampus} />
               <Route path="/students/:studentId" component={SingleStudent} />
-              <Redirect to="/campuses" />
+              <Redirect to="/" />
             </Switch>
-        </main>
+            </main>
+      : null}
       </div>
     );
   }

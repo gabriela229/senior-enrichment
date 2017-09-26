@@ -31,7 +31,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  console.log(ownProps, '**ownprops');
   return {
     handleSubmit (event){
       event.preventDefault();

@@ -15,12 +15,14 @@ class AllCampuses extends Component {
   toggleForm(){
     this.setState({showForm: !this.state.showForm});
   }
+
   render(){
     const {campuses, history} = this.props;
     const {showForm} = this.state;
     const {toggleForm} = this;
     return (
       <div>
+        <h1>Campuses</h1>
         {showForm === true ?
           <CampusForm toggleForm={toggleForm} history={history} />
           :
@@ -33,9 +35,9 @@ class AllCampuses extends Component {
             return (
               <div key={campus.id} className="col-md-4">
                 <NavLink to={`/campuses/${campus.id}`} activeClassName="active">
-                  <div className="thumbnail img-thumbnail" style={{minHeight: 300}}>
-                    <img src={campus.image} style={{maxHeight: 220}} />
-                    <div className="caption"><h4>{campus.name}</h4></div>
+                  <div className="thumbnail" style={{border: 'none'}}>
+                    <img className="img-rounded" src={campus.image} style={{minHeight: 250, minWidth: 250, maxWidth: 250}} />
+                    <div className="caption"><h4 className="text-center">{campus.name}</h4></div>
                   </div>
                 </NavLink>
               </div>
