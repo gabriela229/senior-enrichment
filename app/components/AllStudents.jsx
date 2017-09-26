@@ -25,13 +25,17 @@ class AllStudents extends Component {
     return (
       <div>
         <h1>Students</h1>
+        <div className="row">
+          <div className="col-md-6">
         {showForm === true ?
           <StudentForm toggleForm={toggleForm} history={history} />
           :
           <div className="form-group">
-            <button onClick={toggleForm} className="btn btn-success pull-right">Add Student</button>
+            <button onClick={toggleForm} className="btn btn-success">Add Student</button>
           </div>
         }
+          </div>
+        </div>
         <table className="table table-hover">
           <thead>
             <tr>

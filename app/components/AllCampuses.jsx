@@ -23,6 +23,8 @@ class AllCampuses extends Component {
     return (
       <div>
         <h1>Campuses</h1>
+        <div className="row">
+          <div className="col-md-6">
         {showForm === true ?
           <CampusForm toggleForm={toggleForm} history={history} />
           :
@@ -30,6 +32,8 @@ class AllCampuses extends Component {
             <button onClick={toggleForm} className="btn btn-success ">Add Campus</button>
           </div>
         }
+          </div>
+        </div>
         <div className="row">
           {campuses.map( campus => {
             return (
