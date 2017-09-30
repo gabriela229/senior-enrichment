@@ -38,9 +38,9 @@ router.post('/', (req, res, next) => {
       })
       .then( newStudent => {
         res.send(newStudent);
-      })
-      .catch(next);
+      });
     })
+    .catch(next);
 });
 
 router.put('/:studentId', (req, res, next) => {

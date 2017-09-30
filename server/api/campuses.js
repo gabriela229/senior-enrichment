@@ -23,7 +23,8 @@ router.post('/', (req, res, next) => {
   models.Campus.create(req.body)
   .then( campus => {
     res.send(campus);
-  });
+  })
+  .catch(next);
 });
 
 router.put('/:campusId', (req, res, next) => {

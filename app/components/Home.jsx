@@ -34,12 +34,3 @@ export default function Home () {
   );
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     campuses: state.campuses,
-//     name: state.name,
-//     image: state.image
-//   };
-// };
-
-// export default connect(mapStateToProps)(Home);

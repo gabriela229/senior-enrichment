@@ -1,12 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {postCampus, writeCampus} from '../reducers';
+import {postCampus, resetError} from '../reducers';
 
 
-function CampusForm(props) {
-    const {handleSubmit, onChange, name, image} = props;
+class CampusForm extends Component {
+  constructor(){
+    super();
+    this.state = {
+      name: '',
+      image: '',
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+  onChange(event){
+    const change = {};
+    change[event.target.name] = event.target.value;
+    this.setState(change);
+  }
+  onSubmit(event){
+    event.preventDefault();
+    const name = event.target.name.value;
+    const image = event.target.image.value;
+    this.props.handleSubmit({name, image});
+    this.setState({name: '', image: ''});
+  }
+  componentWillUnmount(){
+    this.props.clearError();
+  }
+  render(){
+    const {error, toggleForm} = this.props;
+    const {name, image} = this.state;
+    const {onSubmit, onChange} = this;
     return (
-      <form className="well" onSubmit={handleSubmit}>
+      <form className="well" onSubmit={onSubmit}>
+      {error.length > 0 ? <div className="alert alert-danger">{error}</div> : null}
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input onChange={onChange} name="name" className="form-control" type="text" value={name} />
@@ -17,35 +45,28 @@ function CampusForm(props) {
         </div>
           <button className="btn btn-success btn-sm">Create Campus</button>
           {' '}
-          <button className="btn btn-warning btn-sm" onClick={props.toggleForm}>Cancel</button>
+          <button className="btn btn-warning btn-sm" onClick={toggleForm}>Cancel</button>
       </form>
     );
+  }
 }
 
 const mapStateToProps = (state) => {
   return {
     campuses: state.campuses,
-    name: state.newCampus.name,
-    image: state.newCampus.image
-  }
-}
+    error: state.error
+  };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    handleSubmit (event){
-      event.preventDefault();
-      const name = event.target.name.value;
-      const image = event.target.image.value;
-      dispatch(postCampus({name, image}, ownProps.history));
-      dispatch(writeCampus({name: '', image: ''}));
-
+    handleSubmit (campus){
+      dispatch(postCampus(campus, ownProps.history));
     },
-    onChange (event){
-      const change = {};
-      change[event.target.name] = event.target.value;
-      dispatch(writeCampus(change));
+    clearError(){
+      dispatch(resetError(''));
     }
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampusForm);

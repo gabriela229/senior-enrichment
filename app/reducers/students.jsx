@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {displayError} from './error';
 
 const GET_STUDENTS = 'GET_STUDENTS';
 const GET_STUDENT = 'GET_STUDENT';
@@ -32,7 +33,8 @@ export function fetchStudents(){
       .then( students => {
         const action = getStudents(students);
         dispatch(action);
-      });
+      })
+      .catch(err => dispatch(displayError(err)));
   };
 }
 
@@ -44,7 +46,11 @@ export function postStudent(student, history){
         const action = getStudent(newStudent);
         dispatch(action);
         history.push(`/students/${newStudent.id}`);
+      })
+      .catch(err => {
+        dispatch(displayError(err));
       });
+
   };
 }
 
@@ -55,7 +61,8 @@ export function updateStudent(student){
       .then( updatedStudent => {
         const action = editStudent(updatedStudent);
         dispatch(action);
-      });
+      })
+      .catch(err => dispatch(displayError(err)));
   };
 }
 

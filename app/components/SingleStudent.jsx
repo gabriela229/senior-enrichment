@@ -1,29 +1,43 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
-import {fetchStudent, writeStudent, updateStudent, deleteStudent} from '../reducers';
+import { updateStudent, deleteStudent} from '../reducers';
 
 class SingleStudent extends Component {
   constructor(){
     super();
     this.state = {
-      showForm: false
+      showForm: false,
+      id: 0,
+      name: '',
+      email: '',
+      campusId: 0
     };
     this.toggleForm = this.toggleForm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
   toggleForm(){
-    this.setState({showForm: !this.state.showForm});
+    const {id, name, email, campusId} = this.props.students.filter( student => {
+      return student.id === this.props.match.params.studentId * 1;
+    })[0];
+    this.setState({showForm: !this.state.showForm, id, name, email, campusId});
   }
   handleSubmit(){
-    this.props.saveStudent(this.props.newStudent);
+    const {id, name, email, campusId} = this.state;
+    this.props.saveStudent({id, name, email, campusId});
     this.toggleForm();
+  }
+  onChange (event){
+    const change = {};
+    change[event.target.name] = event.target.value;
+    this.setState(change);
   }
 
   render(){
-    const {students, campuses, match, updateCurrentStudent, newStudent, onChange, removeStudentOnClick} = this.props;
-    const {showForm} = this.state;
-    const {toggleForm, handleSubmit} = this;
+    const {campuses, students, match, removeStudentOnClick} = this.props;
+    const {showForm, id, name, email, campusId} = this.state;
+    const {toggleForm, handleSubmit, onChange} = this;
     const currentStudent = students.filter( student => {
       return student.id === match.params.studentId * 1;
     })[0];
@@ -45,12 +59,12 @@ class SingleStudent extends Component {
           </thead>
           <tbody>
             { showForm === true ?
-                <tr key={newStudent.id} >
-                  <th scope="row">{newStudent.id}</th>
-                  <td><input className="form-control" name="name" onChange={onChange} value={newStudent.name} type="text" /></td>
-                  <td><input className="form-control" name="email" onChange={onChange} value={newStudent.email} type="text" /></td>
+                <tr key={id} >
+                  <th scope="row">{id}</th>
+                  <td><input className="form-control" name="name" onChange={onChange} value={name} type="text" /></td>
+                  <td><input className="form-control" name="email" onChange={onChange} value={email} type="text" /></td>
                   <td>
-                  <select  onChange={onChange} name="campusId" className="form-control" value={newStudent.campusId}>
+                  <select  onChange={onChange} name="campusId" className="form-control" value={campusId}>
                   <option value="none">--Select One--</option>
                   {campuses.map( campus => {
                     return (
@@ -59,7 +73,7 @@ class SingleStudent extends Component {
                   })}
                 </select>
                   </td>
-                  <td><button onClick={handleSubmit} className="btn btn-primary">Save</button>{' '}<button onClick={toggleForm} className="btn btn-warning">Cancel</button>{' '}<button value={newStudent.id} className="btn btn-danger" onClick={removeStudentOnClick}>Delete</button></td>
+                  <td><button onClick={handleSubmit} className="btn btn-primary">Save</button>{' '}<button onClick={toggleForm} className="btn btn-warning">Cancel</button>{' '}<button value={id} className="btn btn-danger" onClick={removeStudentOnClick}>Delete</button></td>
                 </tr>
                 :
                 <tr key={currentStudent.id}>
@@ -69,7 +83,6 @@ class SingleStudent extends Component {
                   <td><NavLink to={`/campuses/${currentStudent.campusId}`}>{currentStudent.campus.name}</NavLink></td>
                   <td><button
                   onClick={() => {
-                    updateCurrentStudent(currentStudent.id);
                     toggleForm();
                     }
                   } className="btn btn-primary">Edit</button>{' '}<button value={currentStudent.id} className="btn btn-danger" onClick={removeStudentOnClick}>Delete</button></td>
@@ -87,25 +100,14 @@ class SingleStudent extends Component {
 const mapStateToProps = (state) => {
   return {
     students: state.students,
-    campuses: state.campuses,
-    newStudent: state.newStudent
+    campuses: state.campuses
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateCurrentStudent(id){
-    const action = fetchStudent(id);
-    dispatch(action);
-    },
-    onChange (event){
-      const change = {};
-      change[event.target.name] = event.target.value;
-      dispatch(writeStudent(change));
-    },
     saveStudent (student){
       dispatch(updateStudent(student, ownProps.history));
-      dispatch(writeStudent({name: '', email: '', campusId: 0}));
     },
     removeStudentOnClick (event){
       const id = event.target.value * 1;

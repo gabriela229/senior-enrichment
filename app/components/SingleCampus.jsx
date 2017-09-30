@@ -18,7 +18,7 @@ class SingleCampus extends Component {
   }
 
   render(){
-    const {students, campuses, match, history, removeStudentOnClick, removeCampusOnClick, updateCurrentStudent} = this.props;
+    const {students, campuses, match, history, removeStudentOnClick, removeCampusOnClick} = this.props;
     const {showForm} = this.state;
     const {toggleForm} = this;
     const currentCampus = campuses.filter( campus => {
@@ -47,7 +47,7 @@ class SingleCampus extends Component {
           <div className="col-md-6">
 
           {showForm === true ?
-            <StudentForm toggleForm={toggleForm} history={history} campusId={currentCampus.id} />
+            <StudentForm toggleForm={toggleForm} history={history} singleCampusId={currentCampus.id} />
             :
             <div className="form-group">
               <button onClick={toggleForm} className="btn btn-success">Add Student</button>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {fetchStudents} from './students';
+import {displayError} from './error';
 
 const GET_CAMPUSES = 'GET_CAMPUSES';
 const GET_CAMPUS = 'GET_CAMPUS';
@@ -29,6 +30,9 @@ export function fetchCampuses(){
       .then( campuses => {
         const action = getCampuses(campuses);
         dispatch(action);
+      })
+      .catch(err => {
+        dispatch(displayError(err));
       });
   };
 }
@@ -42,7 +46,8 @@ export function postCampus(campus, history){
         dispatch(action);
         history.push(`/campuses/${newCampus.id}`);
       })
-  }
+      .catch(err => dispatch(displayError(err)));
+  };
 }
 
 export function deleteCampus(id, history){
@@ -53,7 +58,8 @@ export function deleteCampus(id, history){
         dispatch(fetchStudents());
         const action = removeCampus(id);
         dispatch(action);
-      });
+      })
+      .catch(err => dispatch(displayError(err)));
   };
 }
 
